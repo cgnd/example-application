@@ -20,8 +20,7 @@ struct examplesensor_config {
 	struct gpio_dt_spec input;
 };
 
-static int examplesensor_sample_fetch(const struct device *dev,
-				      enum sensor_channel chan)
+static int examplesensor_sample_fetch(const struct device *dev, enum sensor_channel chan)
 {
 	const struct examplesensor_config *config = dev->config;
 	struct examplesensor_data *data = dev->data;
@@ -31,8 +30,7 @@ static int examplesensor_sample_fetch(const struct device *dev,
 	return 0;
 }
 
-static int examplesensor_channel_get(const struct device *dev,
-				     enum sensor_channel chan,
+static int examplesensor_channel_get(const struct device *dev, enum sensor_channel chan,
 				     struct sensor_value *val)
 {
 	struct examplesensor_data *data = dev->data;
@@ -71,16 +69,15 @@ static int examplesensor_init(const struct device *dev)
 	return 0;
 }
 
-#define EXAMPLESENSOR_INIT(i)						       \
-	static struct examplesensor_data examplesensor_data_##i;	       \
-									       \
-	static const struct examplesensor_config examplesensor_config_##i = {  \
-		.input = GPIO_DT_SPEC_INST_GET(i, input_gpios),		       \
-	};								       \
-									       \
-	DEVICE_DT_INST_DEFINE(i, examplesensor_init, NULL,		       \
-			      &examplesensor_data_##i,			       \
-			      &examplesensor_config_##i, POST_KERNEL,	       \
-			      CONFIG_SENSOR_INIT_PRIORITY, &examplesensor_api);
+#define EXAMPLESENSOR_INIT(i)                                                                      \
+	static struct examplesensor_data examplesensor_data_##i;                                   \
+                                                                                                   \
+	static const struct examplesensor_config examplesensor_config_##i = {                      \
+		.input = GPIO_DT_SPEC_INST_GET(i, input_gpios),                                    \
+	};                                                                                         \
+                                                                                                   \
+	DEVICE_DT_INST_DEFINE(i, examplesensor_init, NULL, &examplesensor_data_##i,                \
+			      &examplesensor_config_##i, POST_KERNEL, CONFIG_SENSOR_INIT_PRIORITY, \
+			      &examplesensor_api);
 
 DT_INST_FOREACH_STATUS_OKAY(EXAMPLESENSOR_INIT)
